@@ -1,6 +1,6 @@
 import express, { Router, Response, Request } from 'express';
-import { ChallengeService } from '../services/challenge.service';
-import { ServiceErrorCode } from '../services/service.result';
+import {ChallengeService, ServiceErrorCode} from "../services";
+
 
 export class ChallengeController {
     private challengeService: ChallengeService;
