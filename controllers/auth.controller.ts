@@ -31,7 +31,7 @@ export class AuthController {
         const sr= await this.authService.log(req.body.login, req.body.password);
         switch (sr.errorCode) {
             case ServiceErrorCode.success:
-                res.status(201).json(sr.result);
+                res.status(200).json(sr.result);
                 break;
             case ServiceErrorCode.notFound:
                 res.status(404).end();

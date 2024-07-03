@@ -31,7 +31,7 @@ export class UserMiddleware {
                 res.status(403).end();
                 return;
             }
-            if(user.accesses !== 50) {
+            if(user.accesses < 50) {
                 res.status(403).end();
                 return;
             }

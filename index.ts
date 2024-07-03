@@ -46,6 +46,8 @@ async function launchAPI() {
     const userChallengeController = new UserChallengeController(userChallengeService);
     const exerciseChallengeController = new ExerciseChallengeController(registry,exerciseChallengeService);
 
+    app.use(cors());
+
     app.use(express.json());
 
 

@@ -33,23 +33,43 @@ export class AuthService {
     }
 
     async log(login: string, password: string): Promise<ServiceResult<ISession>> {
-        try {
+        try{
             const user = await this.userModel.findOne({
-                login: login,
-                password: SecurityUtils.toSHA256(password)
+                login:login,
+                password:SecurityUtils.toSHA256(password)
             }).exec();
-            if(user !== null) {
-                let dateMillis = new Date().getTime();
-                dateMillis += 100_000_000;
-                let session = await this.sessionModel.create({
-                    token: SecurityUtils.randomToken(),
-                    expiration: dateMillis,
-                    user: user
-                });
-                return ServiceResult.success(session);
+            if(user !== null ){
+                if(!user.active){
+                    return ServiceResult.failed();
+                }
+                let expiration = new Date().getTime() + 1800000;
+                let session = await this.sessionModel.findOne({
+                    user:user
+                }).populate('user').exec();
+                if(session !== null){
+                    if(session.expiration.getTime() < new Date().getTime()){
+                        const update = await this.sessionModel.updateOne({
+                            _id:session
+                        },{
+                            $set:{
+                                token:SecurityUtils.randomToken(),
+                                expiration:expiration
+                            }
+                        }).populate('user').exec();
+
+                    }
+                    return ServiceResult.success(session);
+                }else {
+                    session = await this.sessionModel.create({
+                        user:user,
+                        token:SecurityUtils.randomToken(),
+                        expiration: expiration
+                    });
+                    return ServiceResult.success(session);
+                }
             }
             return ServiceResult.notFound();
-        } catch(err) {
+        }catch(err){
             return ServiceResult.failed();
         }
     }
@@ -63,6 +83,7 @@ export class AuthService {
                 }
             }).populate('user').exec();
             if(session !== null) {
+                console.log("Parfait");
                 return ServiceResult.success(session);
             }
             console.log(session);

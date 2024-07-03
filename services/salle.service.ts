@@ -32,6 +32,7 @@ export class SalleService {
 
     async create(name:string, address:string, description:string, contact:string[],capacity:number,activities:string[],owner:IUser): Promise<ServiceResult<ISalle>> {
         try {
+            console.log(owner);
             const salle = await this.salleModel.create({
                 name: name,
                 address:address,
@@ -63,6 +64,17 @@ export class SalleService {
                 return ServiceResult.success(salle);
             }
             return ServiceResult.notFound();
+        } catch(err) {
+            return ServiceResult.failed();
+        }
+    }
+
+    async getAllOwner(idUser : string): Promise<ServiceResult<ISalle[]>> {
+        try {
+            const salles = await this.salleModel.find({
+                owner:idUser
+            }).exec();
+            return ServiceResult.success(salles);
         } catch(err) {
             return ServiceResult.failed();
         }
