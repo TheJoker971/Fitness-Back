@@ -1,0 +1,29 @@
+# Ignorer le répertoire node_modules
+node_modules/
+
+# Ignorer les fichiers de log
+logs
+*.log
+npm-debug.log*
+
+# Ignorer les répertoires de cache de modules
+.cache
+
+# Ignorer les fichiers de build
+dist/
+build/
+
+# Ignorer les fichiers de configuration d'IDE/éditeur
+.vscode/
+.idea/
+
+# Ignorer les fichiers environnement
+.env
+
+# Ignorer les fichiers de paquets OS spécifiques
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers temporaires
+tmp/
+temp/
